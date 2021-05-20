@@ -9,8 +9,10 @@ import 'model/fcp_message.dart';
 
 class FcpConnection {
 
+  get port => _port;
   int _port;
 
+  get host => _host;
   String _host;
 
   InternetAddress _address;
@@ -34,7 +36,7 @@ class FcpConnection {
 
   FcpConnection.withPort(int port) {
     this._port = port;
-    this._host = "wss://localhost";
+    this._host = "localhost";
   }
 
   FcpConnection.withHostAndPort(String host, int port) {
