@@ -109,4 +109,23 @@ void main() {
     });
   });
 
+  group("Contains message", () {
+    FcpConnection connection;
+    setUp(() {
+      connection = FcpConnection();
+      connection.fcpMessageQueue.addItemToQueue(FcpClientGet("testUri", identifier: "TestIdentifier"));
+    });
+
+    test('Should return true because message queue contains message', () {
+      bool contains = connection.containsMessage("ClientGet", "TestIdentifier");
+      expect(contains, true);
+    });
+
+
+    test('Should return false because message queue doesn\'t contain message', () {
+      bool contains = connection.containsMessage("ClientPut", "TestIdentifier");
+      expect(contains, false);
+    });
+  });
+
 }
