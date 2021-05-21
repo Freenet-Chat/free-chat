@@ -16,7 +16,8 @@ class FcpMessage {
     for(var con in contents) {
       if(con == "EndMessage") break;
       else if(con == "Data") {
-        data = content.split("Data")[1];
+        var split = content.split("Data\n");
+        data = content.split("\n").last;
         break;
       }
       var keyVal = con.split("=");
