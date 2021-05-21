@@ -1,5 +1,7 @@
 # free_chat
 
+![test workflow](https://github.com/Freenet-Chat/free-chat/actions/workflows/unit-test.yaml/badge.svg)
+
 A proof-of-concept of running a chat application over the Freenet.
 
 This application implements an FCP library in Dart, which you can find under lib/src/fcp.
