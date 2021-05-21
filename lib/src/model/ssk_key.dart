@@ -13,12 +13,12 @@ class SSKKey {
   }
 
   String getAsUskInsertUri() {
-    return "USK@${_insertUri.split("@")[1]}/";
+    return "USK@${_insertUri.split("@")[1]}";
   }
 
 
   String getAsUskRequestUri() {
-    return "USK@${_requestUri.split("@")[1]}/";
+    return "USK@${_requestUri.split("@")[1]}";
   }
 
   String getRequestUri() {
