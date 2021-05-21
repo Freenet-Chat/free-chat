@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:free_chat/src/config.dart';
 import 'package:free_chat/src/fcp/fcp.dart';
 import 'package:free_chat/src/model.dart';
@@ -9,16 +11,15 @@ import 'package:free_chat/src/network/database_handler.dart';
 import 'package:free_chat/src/network/networking.dart';
 import 'package:free_chat/src/utils/logger.dart';
 
-
 class Invite {
 
   static final Logger _logger = Logger(Invite().toString());
 
   static final Invite _invite = Invite._internal();
 
-  final Networking _networking = Networking();
+  Networking networking = Networking();
 
-  final DatabaseHandler _databaseHandler = DatabaseHandler();
+  DatabaseHandler databaseHandler = DatabaseHandler();
 
   factory Invite() {
     return _invite;
@@ -34,7 +35,7 @@ class Invite {
 
   Future<InitialInvite> createInitialInvitation(String identifier) async {
 
-    var _sskKey = await _networking.getKeys();
+    var _sskKey = await networking.getKeys();
 
     String _unique = Uuid().v4();
 
@@ -58,13 +59,13 @@ class Invite {
 
     _logger.i("Created Initial chat: $chat");
 
-    await _networking.sendMessage(_insertUri, chat.toString(), identifier);
+    await networking.sendMessage(_insertUri, chat.toString(), identifier);
 
     return initialInvite;
   }
 
   Future<InitialInviteResponse> handleInvitation(InitialInvite initialInvite, String identifierHandshake, String identifierInsert, String identifierRequest) async {
-    var _sskKey = await _networking.getKeys();
+    var _sskKey = await networking.getKeys();
 
     var _insertUri = _sskKey.getAsUskInsertUri() + "chat/0/";
 
@@ -81,24 +82,24 @@ class Invite {
 
     try {
       await Future.wait([
-        _networking.sendMessage(_insertUri, chat.toString(), identifierInsert),
-        _networking.getMessage(initialInvite.getRequestUri(), identifierRequest)
+        networking.sendMessage(_insertUri, chat.toString(), identifierInsert),
+        networking.getMessage(initialInvite.getRequestUri(), identifierRequest)
       ]);
     }
     catch(e) {
-      _logger.e("Upload failed");
+      _logger.e("Upload failed ${e.toString()}");
       return null;
     }
 
     FcpSubscribeUSK fcpSubscribeUSK = FcpSubscribeUSK(initialInvite.getRequestUri(), Uuid().v4());
 
-    _networking.fcpConnection.sendFcpMessage(fcpSubscribeUSK);
+    networking.fcpConnection.sendFcpMessage(fcpSubscribeUSK);
 
     ChatDTO dto = ChatDTO.fromChat(chat);
 
     _logger.i("dto => $dto");
 
-    await _databaseHandler.upsertChat(dto);
+    await databaseHandler.upsertChat(dto);
     return initialInviteResponse;
   }
 
@@ -106,7 +107,7 @@ class Invite {
     FcpMessage fcpChat;
 
     try {
-      fcpChat = await _networking.getMessage(initialInvite.getRequestUri(), Uuid().v4());
+      fcpChat = await networking.getMessage(initialInvite.getRequestUri(), Uuid().v4());
     }
     catch(e) {
       _logger.e(e.toString());
@@ -114,7 +115,6 @@ class Invite {
     }
 
     _logger.i(fcpChat.toString());
-
 
     ChatDTO chatDTO = ChatDTO();
     chatDTO.insertUri = initialInvite.insertUri;
@@ -125,14 +125,12 @@ class Invite {
 
     _logger.i(chatDTO.toMap().toString());
 
-
     FcpSubscribeUSK fcpSubscribeUSK = FcpSubscribeUSK(response.requestUri, Uuid().v4());
 
-    _networking.fcpConnection.sendFcpMessage(fcpSubscribeUSK);
+    networking.fcpConnection.sendFcpMessage(fcpSubscribeUSK);
 
-    await _databaseHandler.upsertChat(chatDTO);
+    await databaseHandler.upsertChat(chatDTO);
 
     return true;
-
   }
 }
