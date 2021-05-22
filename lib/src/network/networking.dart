@@ -18,7 +18,7 @@ class Networking {
 
   final Codec<String, String> stringToBase64 = utf8.fuse(base64);
 
-  FcpConnection fcpConnection;
+  FcpConnection fcpConnection = FcpConnection();
 
   factory Networking() {
     return _networking;
@@ -29,7 +29,6 @@ class Networking {
   Future<Node> connectClient() async {
 
     var _deviceId = Uuid().v4();
-    fcpConnection = FcpConnection();
 
     await fcpConnection.connect();
 
@@ -41,6 +40,10 @@ class Networking {
     FcpWatchGlobal fcpWatchGlobal = FcpWatchGlobal(enabled: true);
 
     await fcpConnection.sendFcpMessage(fcpWatchGlobal);
+
+    if(json != null) {
+      _connected = true;
+    }
 
     return Node.fromJson(json.toJson());
   }
