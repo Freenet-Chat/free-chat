@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+
 class FcpMessage {
   String _name;
 
@@ -12,15 +15,21 @@ class FcpMessage {
   FcpMessage.fromString(String content) {
     var contents = content.split("\n");
     this._name = contents.first;
+    contents.removeAt(0);
+    bool hasData = false;
 
     for(var con in contents) {
       if(con == "EndMessage") break;
       else if(con == "Data") {
-        data = content.split("Data")[1];
+        hasData = true;
+        continue;
+      }
+      else if(hasData) {
+        data = con;
         break;
       }
-      var keyVal = con.split("=");
-      this.setField(keyVal.first, keyVal.last);
+      int idx = con.indexOf('=');
+      this.setField(con.substring(0, idx), con.substring(idx+1));
     }
 
   }
@@ -51,4 +60,14 @@ class FcpMessage {
       key: _fields[key]
   };
 
+  @override
+  bool operator == (Object other) {
+    return other is FcpMessage &&
+    other._name == _name &&
+    other.data == data &&
+    mapEquals(other._fields, _fields);
+  }
+  
+  @override
+  int get hashCode => hashValues(_name, _fields, data);
 }

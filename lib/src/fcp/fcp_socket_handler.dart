@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:free_chat/src/utils/logger.dart';
 
-import '../fcp.dart';
+import 'fcp.dart';
 
 class FcpSocketHandler {
   FcpMessageQueue _fcpMessageQueue;

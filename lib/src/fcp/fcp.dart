@@ -8,4 +8,4 @@ export 'package:free_chat/src/fcp/model/persistence.dart';
 
 export 'package:free_chat/src/fcp/fcp_message_handler.dart';
 
-export 'package:free_chat/src/fcp/model/fcp_socket_handler.dart';
+export 'package:free_chat/src/fcp/fcp_socket_handler.dart';
