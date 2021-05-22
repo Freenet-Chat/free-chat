@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:free_chat/src/fcp/fcp.dart';
 import 'package:free_chat/src/utils/logger.dart';
-import 'package:web_socket_channel/io.dart';
 
 import 'model/fcp_message.dart';
 
@@ -17,9 +16,9 @@ class FcpConnection {
 
   InternetAddress _address;
 
-  Socket socket;
-
   String response;
+
+  FcpSocketHandler fcpSocketHandler;
 
   final int defaultPort = 9481;
 
@@ -46,81 +45,27 @@ class FcpConnection {
 
   Future<void> connect() async {
     _logger.i("Connecting to $_host on Port $_port");
+    this.fcpSocketHandler = FcpSocketHandler(fcpMessageQueue);
+    Socket socket;
     socket = await Socket.connect(_host, _port).then((Socket sock) {
       socket = sock;
-      socket.listen(dataHandler,
-          onError: errorHandler,
-          onDone: doneHandler,
+      socket.listen(this.fcpSocketHandler.dataHandler,
+          onError: this.fcpSocketHandler.errorHandler,
+          onDone: this.fcpSocketHandler.doneHandler,
           cancelOnError: false);
       return socket;
     });
-  }
-
-  void dataHandler(data) {
-
-    FcpMessage fcpMessage = null;
-
-    String msg = new String.fromCharCodes(data).trim();
-    bool flag = false;
-    for(var line in msg.split("\n")) {
-      if (line == null) {
-        fcpMessageQueue.addItemToQueue(fcpMessage);
-        break;
-      }
-      if (flag) {
-
-        fcpMessage.data = line;
-        fcpMessageQueue.addItemToQueue(fcpMessage);
-        fcpMessage = null;
-
-        flag = false;
-        continue;
-      }
-      if (line.length == 0) {
-        continue;
-      }
-      line = line.trim();
-      if (fcpMessage == null) {
-        fcpMessage = new FcpMessage(line);
-        continue;
-      }
-      if (line.toLowerCase() == "EndMessage".toLowerCase()) {
-        //fcpConnection.handleMessage(fcpMessage);
-
-        fcpMessageQueue.addItemToQueue(fcpMessage);
-        fcpMessage = null;
-      }
-      if("Data".toLowerCase() == line.toLowerCase()) {
-        flag = true;
-      }
-      int equalSign = line.indexOf('=');
-      if (equalSign == -1) {
-        continue;
-      }
-      String field = line.substring(0, equalSign);
-      String value = line.substring(equalSign + 1);
-      assert(fcpMessage != null);
-      fcpMessage.setField(field, value);
-    }
-  }
-
-  AsyncError errorHandler(Object error, StackTrace trace) {
-    _logger.e(error);
-    return null;
-  }
-
-  void doneHandler() {
-    socket.destroy();
+    this.fcpSocketHandler.registerSocket(socket);
   }
 
   Future<void> sendFcpMessage(FcpMessage message) async {
     _logger.i("Sending message: ${message.toString()}");
-    socket.write(message);
+    this.fcpSocketHandler.writeSocket(message);
     FcpMessageHandler().identifierToUri[message.getField("Identifier")] = message.getField("URI");
   }
 
   Future<FcpMessage> sendFcpMessageAndWait(FcpMessage message) async {
-    socket.write(message);
+    this.fcpSocketHandler.writeSocket(message);
     FcpMessageHandler().identifierToUri[message.getField("Identifier")] = message.getField("URI");
     FcpMessage lastMessage = fcpMessageQueue.getLastMessage();
 
@@ -130,7 +75,7 @@ class FcpConnection {
   }
 
   Future<FcpMessage> sendFcpMessageAndWaitWithAwaitedResponse(FcpMessage message, String awaitedResponse, {String errorResponse}) async {
-    socket.write(message);
+    this.fcpSocketHandler.writeSocket(message);
     FcpMessageHandler().identifierToUri[message.getField("Identifier")] = message.getField("URI");
 
     await waitWhile(() => !(containsMessage(awaitedResponse, message.getField("Identifier"), errorResponse: errorResponse)));
