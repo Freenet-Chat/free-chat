@@ -13,7 +13,7 @@ import 'package:free_chat/src/fcp/fcp_connection.dart';
 import 'fcp_connection_test.mocks.dart';
 import 'fcp_test_strings.dart';
 
-@GenerateMocks([Socket])
+@GenerateMocks([FcpSocketHandler])
 void main() {
   group('Constructors', () {
     test('Connection should use default host and port', () {
@@ -35,35 +35,11 @@ void main() {
     });
   });
 
-  group('Message converter', () {
-    FcpConnection connection;
-    setUp(() {
-      connection = FcpConnection();
-    });
-
-    test('Should create fcp message out of byte response from Socket', () {
-      Iterable<int> fcpBytes = utf8.encode(FcpTestStrings.NodeHello);
-
-      expect(connection.fcpMessageQueue.messageQueue.length, 0);
-      connection.dataHandler(fcpBytes);
-      expect(connection.fcpMessageQueue.getLastMessage().name, "NodeHello");
-    });
-
-    test('Should create fcp message with data out of byte response from Socket', () {
-      Iterable<int> fcpBytes = utf8.encode(FcpTestStrings.AllData);
-
-      expect(connection.fcpMessageQueue.messageQueue.length, 0);
-      connection.dataHandler(fcpBytes);
-      expect(connection.fcpMessageQueue.getLastMessage().name, "AllData");
-      expect(connection.fcpMessageQueue.getLastMessage().data, "Hello World");
-    });
-  });
-
   group('Write messages', () {
     FcpConnection connection;
     FcpClientGet fcpClientGet;
     FcpMessage fcpMessage;
-    Socket socket = MockSocket();
+    FcpSocketHandler fcpSocketHandler = MockFcpSocketHandler();
 
     void simulateMessages() {
         for(var i = 0; i < 5; i++) {
@@ -75,18 +51,18 @@ void main() {
 
     setUp(() {
       connection = FcpConnection();
-      connection.socket = socket;
+      connection.fcpSocketHandler = fcpSocketHandler;
       fcpClientGet = FcpClientGet("testUri", identifier: "testIdentifier");
       fcpMessage = FcpMessage("Hello World!");
       fcpMessage.setField("Identifier", "testIdentifier");
 
-      when(connection.socket.write(any)).thenAnswer((realInvocation) {
+      when(connection.fcpSocketHandler.writeSocket(any)).thenAnswer((realInvocation) {
         Future(() => simulateMessages());
       });
     });
 
     test('Should write FcpClientGet message and map the identifier', () async {
-      when(connection.socket.write(any)).thenAnswer((realInvocation) {
+      when(connection.fcpSocketHandler.writeSocket(any)).thenAnswer((realInvocation) {
         expect(realInvocation.positionalArguments.first, fcpClientGet);
       });
 
