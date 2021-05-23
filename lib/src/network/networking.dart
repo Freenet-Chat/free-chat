@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:free_chat/src/fcp/fcp.dart';
 import 'package:free_chat/src/fcp/model/persistence.dart';
 import 'package:free_chat/src/model.dart';
+import 'package:free_chat/src/utils/converter.dart';
 import 'package:free_chat/src/utils/device.dart';
 import 'package:free_chat/src/utils/logger.dart';
 
@@ -15,8 +16,6 @@ class Networking {
   static final Networking _networking = Networking._internal();
 
   static final Logger _logger = Logger(Networking().toString());
-
-  final Codec<String, String> stringToBase64 = utf8.fuse(base64);
 
   FcpConnection fcpConnection = FcpConnection();
 
@@ -70,15 +69,15 @@ class Networking {
     }
 
     var data = t.data;
-    stringToBase64.decode(data);
+    Converter.stringToBase64.decode(data);
 
-    t.data = stringToBase64.decode(data);
+    t.data = Converter.stringToBase64.decode(data);
 
     return t;
   }
 
   Future<FcpMessage> sendMessage(String uri, String data, String identifier) async {
-    var base64Str = stringToBase64.encode(data) + "\n";
+    var base64Str = Converter.stringToBase64.encode(data) + "\n";
 
     FcpClientPut put = FcpClientPut(uri, base64Str, priorityClass: 2, dontCompress: true, identifier: identifier, global: true, persistence: Persistence.forever, dataLength: base64Str.length, metaDataContentType: "", realTimeFlag: true, extraInsertsSingleBlock: 0, extraInsertsSplitfileHeaderBlock: 0);
 
@@ -102,7 +101,4 @@ class Networking {
     fcpConnection.sendFcpMessage(fcpClienteGet);
     fcpConnection.sendFcpMessage(fcpSubscribeUSK);
   }
-
-
-
 }
