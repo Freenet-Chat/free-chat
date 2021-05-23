@@ -6,6 +6,7 @@ import 'package:free_chat/src/fcp/fcp.dart';
 import 'package:free_chat/src/model.dart';
 import 'package:free_chat/src/network/database_handler.dart';
 import 'package:free_chat/src/network/messaging.dart';
+import 'package:free_chat/src/repositories/chat_repository.dart';
 
 class ChatsDetail extends StatefulWidget {
   Chat chat;
@@ -88,7 +89,7 @@ class _ChatsDetailState extends State<ChatsDetail> {
             children: <Widget>[
               FutureBuilder(
                   future:
-                      DatabaseHandler().fetchChatAndMessages(widget.chatDTO.id),
+                  ChatRepository().fetchChatAndMessages(widget.chatDTO.id),
                   builder: (context, snapshot) {
                     if (snapshot.data == null) {
                       return Container(

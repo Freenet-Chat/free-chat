@@ -5,6 +5,8 @@ import 'package:free_chat/src/fcp/fcp.dart';
 import 'package:free_chat/src/model.dart';
 import 'package:free_chat/src/network/database_handler.dart';
 import 'package:free_chat/src/network/networking.dart';
+import 'package:free_chat/src/repositories/chat_repository.dart';
+import 'package:free_chat/src/repositories/message_repository.dart';
 import 'package:free_chat/src/utils/logger.dart';
 import 'package:free_chat/src/utils/converter.dart';
 
@@ -29,16 +31,16 @@ class Messaging extends ChangeNotifier {
     messageDTO.chatId = chat.id;
     messageDTO.messageTyp = "sender";
 
-    await _databaseHandler.upsertMessage(messageDTO);
+    await MessageRepository().upsert(messageDTO);
 
-    var messages = (await _databaseHandler.fetchChatAndMessages(chat.id)).messages;
+    var messages = (await ChatRepository().fetchChatAndMessages(chat.id)).messages;
 
     Chat _chat = Chat.fromDTO(chat, messages);
 
     _networking.sendMessage(chat.insertUri, _chat.toString(), Uuid().v4()).then((value) {
       _logger.i("Send Message Successful");
       messageDTO.status = "sent";
-      _databaseHandler.upsertMessage(messageDTO).then((value) => notifyListeners());
+      MessageRepository().upsert(messageDTO).then((value) => notifyListeners());
 
     });
   }
@@ -48,7 +50,7 @@ class Messaging extends ChangeNotifier {
     String json = Converter.stringToBase64.decode(fcpMessage.data);
     Chat chat = Chat.fromJson(jsonDecode(json), requestUri);
 
-    ChatDTO chatDTO = await _databaseHandler.fetchChatBySharedId(chat.sharedId);
+    ChatDTO chatDTO = await ChatRepository().fetchChatBySharedId(chat.sharedId);
 
     updateMessages(chatDTO, chat);
 
@@ -57,7 +59,7 @@ class Messaging extends ChangeNotifier {
 
   Future<ChatDTO> updateMessages(ChatDTO chatDTO, Chat newChat) async {
     List<String> updated = [];
-    var oldChat = await _databaseHandler.fetchChatAndMessages(chatDTO.id);
+    var oldChat = await ChatRepository().fetchChatAndMessages(chatDTO.id);
     for(Message msg in newChat.messages) {
       bool flag = false;
       for(Message msg2 in oldChat.messages) {
@@ -73,7 +75,7 @@ class Messaging extends ChangeNotifier {
         messageDTO.messageTyp = "receiver";
         messageDTO.chatId = chatDTO.id;
         messageDTO.status = "received";
-        await _databaseHandler.upsertMessage(messageDTO);
+        await MessageRepository().upsert(messageDTO);
         notifyListeners();
       }
     }

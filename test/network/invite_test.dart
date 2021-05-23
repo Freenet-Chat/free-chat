@@ -3,6 +3,7 @@ import 'package:free_chat/src/fcp/fcp.dart';
 import 'package:free_chat/src/model.dart';
 import 'package:free_chat/src/network/database_handler.dart';
 import 'package:free_chat/src/network/networking.dart';
+import 'package:free_chat/src/repositories/chat_repository.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -11,7 +12,7 @@ import 'package:uuid/uuid.dart';
 
 import 'invite_test.mocks.dart';
 
-@GenerateMocks([Networking, Uuid, DatabaseHandler, FcpConnection])
+@GenerateMocks([Networking, Uuid, FcpConnection, ChatRepository])
 void main() {
   group('Test invite creation, handling and acception', ()
   {
@@ -24,7 +25,7 @@ void main() {
     setUp(() {
       invite = Invite();
       invite.networking = MockNetworking();
-      invite.databaseHandler = MockDatabaseHandler();
+      invite.chatRepository = MockChatRepository();
 
       MockFcpConnection mockFcpConnection = MockFcpConnection();
 
@@ -40,7 +41,7 @@ void main() {
 
       when(mockFcpConnection.sendFcpMessage(any)).thenAnswer((realInvocation) => null);
 
-      when(invite.databaseHandler.upsertChat(any)).thenAnswer((realInvocation) {
+      when(invite.chatRepository.upsert(any)).thenAnswer((realInvocation) {
         temp = realInvocation.positionalArguments.first;
         return;
       });

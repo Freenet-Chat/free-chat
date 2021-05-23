@@ -9,6 +9,7 @@ import 'package:free_chat/src/model.dart';
 import 'package:free_chat/src/model/initial_invite_response.dart';
 import 'package:free_chat/src/network/database_handler.dart';
 import 'package:free_chat/src/network/networking.dart';
+import 'package:free_chat/src/repositories/chat_repository.dart';
 import 'package:free_chat/src/utils/logger.dart';
 
 class Invite {
@@ -19,7 +20,7 @@ class Invite {
 
   Networking networking = Networking();
 
-  DatabaseHandler databaseHandler = DatabaseHandler();
+  ChatRepository chatRepository = ChatRepository();
 
   factory Invite() {
     return _invite;
@@ -99,7 +100,7 @@ class Invite {
 
     _logger.i("dto => $dto");
 
-    await databaseHandler.upsertChat(dto);
+    await chatRepository.upsert(dto);
     return initialInviteResponse;
   }
 
@@ -129,7 +130,7 @@ class Invite {
 
     networking.fcpConnection.sendFcpMessage(fcpSubscribeUSK);
 
-    await databaseHandler.upsertChat(chatDTO);
+    await chatRepository.upsert(chatDTO);
 
     return true;
   }

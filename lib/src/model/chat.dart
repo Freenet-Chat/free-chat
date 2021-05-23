@@ -55,6 +55,10 @@ class Chat {
     this._messages.add(message);
   }
 
+  void addMessages(List<Message> msgs) {
+    _messages.addAll(msgs);
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'insertUri': _insertUri,
