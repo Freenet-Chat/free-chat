@@ -89,25 +89,4 @@ void main() {
 
     });
   });
-
-  group('Test base64 de- and encode', () {
-    Networking networking = Networking();
-    var encoded = "SGVsbG8gV29ybGQh";
-    var decoded = "Hello World!";
-    setUp(() {
-      networking = Networking();
-    });
-
-    test('Should encode to base64', () {
-      var stringEncoded = networking.stringToBase64.encode(decoded);
-      expect(stringEncoded, encoded);
-    });
-
-
-    test('Should decode from base64', () {
-      var stringDecoded = networking.stringToBase64.decode(encoded);
-      expect(stringDecoded, decoded);
-    });
-
-  });
 }

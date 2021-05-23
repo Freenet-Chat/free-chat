@@ -6,6 +6,7 @@ import 'package:free_chat/src/model.dart';
 import 'package:free_chat/src/network/database_handler.dart';
 import 'package:free_chat/src/network/networking.dart';
 import 'package:free_chat/src/utils/logger.dart';
+import 'package:free_chat/src/utils/converter.dart';
 
 class Messaging extends ChangeNotifier {
   static final Messaging _messaging = Messaging._internal();
@@ -15,8 +16,6 @@ class Messaging extends ChangeNotifier {
   final Networking _networking = Networking();
 
   final DatabaseHandler _databaseHandler = DatabaseHandler();
-
-  final Codec<String, String> stringToBase64 = utf8.fuse(base64);
 
   factory Messaging() {
     return _messaging;
@@ -46,7 +45,7 @@ class Messaging extends ChangeNotifier {
 
   Future<void> updateChat(FcpMessage fcpMessage, String requestUri) async {
 
-    String json = stringToBase64.decode(fcpMessage.data);
+    String json = Converter.stringToBase64.decode(fcpMessage.data);
     Chat chat = Chat.fromJson(jsonDecode(json), requestUri);
 
     ChatDTO chatDTO = await _databaseHandler.fetchChatBySharedId(chat.sharedId);
