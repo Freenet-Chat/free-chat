@@ -1,5 +1,9 @@
 export 'package:free_chat/src/fcp/fcp_connection.dart';
 
+export 'package:free_chat/src/fcp/fcp_connection_local.dart';
+
+export 'package:free_chat/src/fcp/fcp_connection_port.dart';
+
 export 'package:free_chat/src/fcp/model/fcp_model.dart';
 
 export 'package:free_chat/src/fcp/model/return_type.dart';

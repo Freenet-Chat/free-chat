@@ -17,7 +17,7 @@ class Networking {
 
   static final Logger _logger = Logger(Networking().toString());
 
-  FcpConnection fcpConnection = FcpConnection();
+  FcpConnection fcpConnection = FcpConnectionLocal();
 
   factory Networking() {
     return _networking;
