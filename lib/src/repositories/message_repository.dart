@@ -8,6 +8,7 @@ import '../model.dart';
 class MessageRepository implements RepositoryInterface<MessageDTO> {
   static final MessageRepository _messageRepository = MessageRepository._internal();
 
+  // TODO: Refactor unused variable
   final Logger _logger = Logger("MessageRepository");
 
   final DatabaseHandler _databaseHandler = DatabaseHandler();

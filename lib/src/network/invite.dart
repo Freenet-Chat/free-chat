@@ -26,6 +26,7 @@ class Invite {
     return _invite;
   }
 
+  // TODO: Refactor unused variable
   ChatClient _client;
 
   Invite._internal();
@@ -72,6 +73,7 @@ class Invite {
 
     var _requestUri = _sskKey.getAsUskRequestUri() + "chat/0/";
 
+    // TODO: Refactor unused variable
     String _unique = Uuid().v4();
 
     _logger.i("InitialInvite12 => $initialInvite");

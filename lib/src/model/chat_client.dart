@@ -1,5 +1,6 @@
 import 'package:free_chat/src/model.dart';
 
+// TODO: Refactor unused class
 class ChatClient {
   SSKKey _key;
   String _name;

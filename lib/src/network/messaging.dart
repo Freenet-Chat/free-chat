@@ -17,6 +17,7 @@ class Messaging extends ChangeNotifier {
 
   final Networking _networking = Networking();
 
+  // TODO: Refactor unused variable
   final DatabaseHandler _databaseHandler = DatabaseHandler();
 
   factory Messaging() {

@@ -32,6 +32,7 @@ class FcpMessageHandler extends ChangeNotifier {
 
   HashMap<String, String> identifierToUri = HashMap();
 
+  // TODO: Refactor Switch case
   handleMessage(FcpConnection _fcpConnection) {
     var msg = _fcpConnection.fcpMessageQueue.getLastMessage();
     _logger.i(msg.name);

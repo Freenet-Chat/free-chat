@@ -8,6 +8,8 @@ import 'package:free_chat/src/utils/logger.dart';
 
 import '../model.dart';
 
+
+// TODO: Refactor unused class
 class Listener {
 
   static final Logger _logger = Logger(Listener().toString());

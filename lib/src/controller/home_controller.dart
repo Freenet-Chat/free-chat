@@ -42,6 +42,8 @@ class HomeController {
 
   Future<void> invite(BuildContext context) async {
     Invite invite = Invite();
+
+    // TODO: Refactor unused Variable
     DatabaseHandler _databaseHandler = DatabaseHandler();
 
     invite.setClient(ChatClient(_sskKey, "Dennis"));
@@ -84,16 +86,20 @@ class HomeController {
     _logger.i(invitationResponse.toString());
 
     if(invitationResponse != null) {
+      // TODO: Refactor duplicated code Just Navigator.pop once before if
       Navigator.pop(context);
       HomeJoinPopup.build(context, invitationResponse);
     }
     else {
+      // TODO: Refactor duplicated code Just Navigator.pop once before if
       Navigator.pop(context);
       ErrorPopup.build(context, "An error occured while trying to join the chat room, please try again later");
 
     }
   }
 
+
+  // TODO: Refactor misleading function name -> getTextForNodeString
   String getTextForButton() {
     if(_currentNode == null) {
       return "Not connected to Node";
