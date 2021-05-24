@@ -2,15 +2,12 @@
 import 'package:free_chat/src/network/database_handler.dart';
 import 'package:free_chat/src/repositories/message_repository.dart';
 import 'package:free_chat/src/repositories/repository_interface.dart';
-import 'package:free_chat/src/utils/logger.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../model.dart';
 
 class ChatRepository implements RepositoryInterface<ChatDTO>{
   static final ChatRepository _chatRepository = ChatRepository._internal();
-
-  final Logger _logger = Logger("ChatRepository");
   
   final DatabaseHandler _databaseHandler = DatabaseHandler();
 

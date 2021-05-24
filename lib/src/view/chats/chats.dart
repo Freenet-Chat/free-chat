@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:free_chat/src/network/database_handler.dart';
 import 'package:free_chat/src/repositories/chat_repository.dart';
 import 'package:free_chat/src/view.dart';
-
-import '../../model.dart';
 
 class Chats extends StatefulWidget {
   @override

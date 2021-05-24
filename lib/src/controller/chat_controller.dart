@@ -19,6 +19,7 @@ class ChatController {
   ChatController._internal();
 
   Future<void> sendMessage(ChatDTO chat, String text) async {
+    _logger.i("Sending message: $text");
 
     var timestamp = formatDate(DateTime.now(), [dd, '/', mm, '/', yyyy, ' ', HH, ':', nn]);
 

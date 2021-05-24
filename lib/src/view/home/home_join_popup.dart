@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:free_chat/src/model.dart';
+import 'package:free_chat/src/utils/clipboard_helper.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../controller.dart';
@@ -28,13 +29,12 @@ class HomeJoinPopup {
         ),
       ),
       actions: <Widget>[
-        ElevatedButton(onPressed: () async => { _homeJoinController.copyToClipboard(invite) }, child: Text("Copy invite code"), style: ElevatedButton.styleFrom()
+        ElevatedButton(onPressed: () async => { ClipboardHelper.copyToClipboard(inviteResponse: invite) }, child: Text("Copy invite code"), style: ElevatedButton.styleFrom()
         ),
-        new FlatButton(
+        new TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          textColor: Theme.of(context).primaryColor,
           child: const Text('Close'),
         ),
         ElevatedButton(onPressed: () async => { await _homeJoinController.inviteAccepted(invite, context) }, child: Text("Done"), style: ElevatedButton.styleFrom()

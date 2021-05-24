@@ -1,14 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:free_chat/src/fcp/fcp.dart';
 import 'package:free_chat/src/model.dart';
-import 'package:free_chat/src/network/database_handler.dart';
 import 'package:free_chat/src/network/invite.dart';
-import 'package:free_chat/src/network/networking.dart';
 import 'package:free_chat/src/utils/logger.dart';
-import 'package:free_chat/src/utils/toast.dart';
 import 'package:free_chat/src/view.dart';
 
 class HomeInviteController {
@@ -20,10 +14,6 @@ class HomeInviteController {
   factory HomeInviteController() {
     return _homeInviteController;
   }
-
-  DatabaseHandler _databaseHandler = DatabaseHandler();
-
-  Networking _networking = Networking();
 
   Invite _invite = Invite();
 
@@ -41,21 +31,10 @@ class HomeInviteController {
 
     LoadingPopup.build(context, "Joining Chatroom this can take up to a couple minutes");
 
-    if(await _invite.inviteAccepted(invite, InitialInviteResponse.fromBase64(i))) {
-      Navigator.pop(context);
-      Navigator.pop(context);
-    }
-    else {
-      Navigator.pop(context);
-      Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.pop(context);
+    if(!(await _invite.inviteAccepted(invite, InitialInviteResponse.fromBase64(i)))) {
       ErrorPopup.build(context, "An error occured while trying to join the chat room, please try again later");
     }
-
   }
-
-  void copyToClipboard(InitialInvite invite) {
-    Clipboard.setData(new ClipboardData(text: invite.toBase64()));
-    FreeToast.showToast("Copied to clipboard");
-  }
-
 }

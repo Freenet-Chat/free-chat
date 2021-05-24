@@ -14,8 +14,6 @@ class FcpConnection {
   get host => _host;
   String _host;
 
-  InternetAddress _address;
-
   String response;
 
   FcpSocketHandler fcpSocketHandler;

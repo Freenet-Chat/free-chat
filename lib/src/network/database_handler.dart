@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:free_chat/src/model.dart';
-import 'package:free_chat/src/model/chat_dto.dart';
 import 'package:free_chat/src/utils/logger.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -23,6 +21,7 @@ class DatabaseHandler {
   DatabaseHandler._internal();
 
   Future<void> initializeDatabase(String databaseName) async {
+    _logger.i("Initializing Database");
 
     String createChat = "CREATE TABLE chat(id INTEGER PRIMARY KEY, insertUri TEXT, requestUri TEXT, encryptKey TEXT, name TEXT, sharedId TEXT)";
     String createMessage = "CREATE TABLE message(id INTEGER PRIMARY KEY, sender TEXT, message TEXT, status TEXT, timestamp TEXT, chatId INTEGER, messageType TEXT, FOREIGN KEY (chatId) REFERENCES Chat (id) ON DELETE NO ACTION ON UPDATE NO ACTION)";
@@ -33,10 +32,10 @@ class DatabaseHandler {
         onCreate: (db, version) {
           return Future.wait([
             db.execute(
-              "CREATE TABLE chat(id INTEGER PRIMARY KEY, insertUri TEXT, requestUri TEXT, encryptKey TEXT, name TEXT, sharedId TEXT)",
+                createChat
             ),
             db.execute(
-              "CREATE TABLE message(id INTEGER PRIMARY KEY, sender TEXT, message TEXT, status TEXT, timestamp TEXT, chatId INTEGER, messageType TEXT, FOREIGN KEY (chatId) REFERENCES Chat (id) ON DELETE NO ACTION ON UPDATE NO ACTION)",
+                createMessage
             )
           ]);
         },

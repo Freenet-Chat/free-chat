@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:free_chat/src/network/database_handler.dart';
 import 'package:free_chat/src/network/invite.dart';
 import 'package:free_chat/src/network/networking.dart';
 import 'package:free_chat/src/repositories/chat_repository.dart';
@@ -18,7 +15,6 @@ class HomeController {
 
   Node _currentNode;
 
-  SSKKey _sskKey;
 
   factory HomeController() {
     return _homeController;
@@ -42,9 +38,6 @@ class HomeController {
 
   Future<void> invite(BuildContext context) async {
     Invite invite = Invite();
-    DatabaseHandler _databaseHandler = DatabaseHandler();
-
-    invite.setClient(ChatClient(_sskKey, "Dennis"));
 
     String identifier = Uuid().v4();
 
@@ -83,18 +76,18 @@ class HomeController {
 
     _logger.i(invitationResponse.toString());
 
+    Navigator.pop(context);
     if(invitationResponse != null) {
-      Navigator.pop(context);
       HomeJoinPopup.build(context, invitationResponse);
     }
     else {
-      Navigator.pop(context);
       ErrorPopup.build(context, "An error occured while trying to join the chat room, please try again later");
 
     }
   }
 
-  String getTextForButton() {
+
+  String getNodeDescription() {
     if(_currentNode == null) {
       return "Not connected to Node";
     }

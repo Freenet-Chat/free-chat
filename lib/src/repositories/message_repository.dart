@@ -1,14 +1,11 @@
 import 'package:free_chat/src/network/database_handler.dart';
 import 'package:free_chat/src/repositories/repository_interface.dart';
-import 'package:free_chat/src/utils/logger.dart';
 
 
 import '../model.dart';
 
 class MessageRepository implements RepositoryInterface<MessageDTO> {
   static final MessageRepository _messageRepository = MessageRepository._internal();
-
-  final Logger _logger = Logger("MessageRepository");
 
   final DatabaseHandler _databaseHandler = DatabaseHandler();
 

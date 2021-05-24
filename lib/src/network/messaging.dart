@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:free_chat/src/fcp/fcp.dart';
 import 'package:free_chat/src/model.dart';
-import 'package:free_chat/src/network/database_handler.dart';
 import 'package:free_chat/src/network/networking.dart';
 import 'package:free_chat/src/repositories/chat_repository.dart';
 import 'package:free_chat/src/repositories/message_repository.dart';
@@ -16,8 +15,6 @@ class Messaging extends ChangeNotifier {
   final Logger _logger = Logger("Messaging");
 
   final Networking _networking = Networking();
-
-  final DatabaseHandler _databaseHandler = DatabaseHandler();
 
   factory Messaging() {
     return _messaging;
@@ -57,7 +54,7 @@ class Messaging extends ChangeNotifier {
   }
 
 
-  Future<ChatDTO> updateMessages(ChatDTO chatDTO, Chat newChat) async {
+  Future<void> updateMessages(ChatDTO chatDTO, Chat newChat) async {
     List<String> updated = [];
     var oldChat = await ChatRepository().fetchChatAndMessages(chatDTO.id);
     for(Message msg in newChat.messages) {
@@ -79,6 +76,7 @@ class Messaging extends ChangeNotifier {
         notifyListeners();
       }
     }
+
 
 
   }

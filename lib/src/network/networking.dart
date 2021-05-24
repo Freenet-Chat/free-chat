@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:free_chat/src/fcp/fcp.dart';
 import 'package:free_chat/src/fcp/model/persistence.dart';
 import 'package:free_chat/src/model.dart';
 import 'package:free_chat/src/utils/converter.dart';
-import 'package:free_chat/src/utils/device.dart';
 import 'package:free_chat/src/utils/logger.dart';
 
 class Networking {

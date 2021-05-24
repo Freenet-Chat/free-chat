@@ -29,7 +29,7 @@ class FcpSocketHandler {
 
   void dataHandler(data) {
 
-    FcpMessage fcpMessage = null;
+    FcpMessage fcpMessage;
 
     String msg = new String.fromCharCodes(data).trim();
     bool flag = false;

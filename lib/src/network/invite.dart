@@ -1,13 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:free_chat/src/config.dart';
 import 'package:free_chat/src/fcp/fcp.dart';
 import 'package:free_chat/src/model.dart';
 import 'package:free_chat/src/model/initial_invite_response.dart';
-import 'package:free_chat/src/network/database_handler.dart';
 import 'package:free_chat/src/network/networking.dart';
 import 'package:free_chat/src/repositories/chat_repository.dart';
 import 'package:free_chat/src/utils/logger.dart';
@@ -26,13 +21,7 @@ class Invite {
     return _invite;
   }
 
-  ChatClient _client;
-
   Invite._internal();
-
-  void setClient(ChatClient client) {
-    this._client = client;
-  }
 
   Future<InitialInvite> createInitialInvitation(String identifier) async {
 
@@ -71,8 +60,6 @@ class Invite {
     var _insertUri = _sskKey.getAsUskInsertUri() + "chat/0/";
 
     var _requestUri = _sskKey.getAsUskRequestUri() + "chat/0/";
-
-    String _unique = Uuid().v4();
 
     _logger.i("InitialInvite12 => $initialInvite");
 

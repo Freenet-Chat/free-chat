@@ -1,16 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:free_chat/src/controller/chat_controller.dart';
-import 'package:free_chat/src/fcp/fcp.dart';
 import 'package:free_chat/src/model.dart';
-import 'package:free_chat/src/network/database_handler.dart';
 import 'package:free_chat/src/network/messaging.dart';
 import 'package:free_chat/src/repositories/chat_repository.dart';
 
 class ChatsDetail extends StatefulWidget {
-  Chat chat;
-  ChatDTO chatDTO;
+  final Chat chat;
+  final ChatDTO chatDTO;
 
   ChatsDetail(this.chat, this.chatDTO);
 

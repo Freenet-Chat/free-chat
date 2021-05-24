@@ -5,9 +5,9 @@ import 'package:free_chat/src/fcp/fcp.dart';
 
 class LoadingPopupWithProgress extends StatefulWidget {
 
-  String text;
+  final String text;
 
-  List<String> identifiersToListenTo;
+  final List<String> identifiersToListenTo;
 
   LoadingPopupWithProgress(this.text, this.identifiersToListenTo);
 
@@ -26,7 +26,6 @@ class _LoadingPopupWithProgressState extends State<LoadingPopupWithProgress> {
       if(!mounted)
         return;
 
-      String progress = "";
       int total = 0;
       int successful = 0;
       for(var prog in FcpMessageHandler().progress.keys) {

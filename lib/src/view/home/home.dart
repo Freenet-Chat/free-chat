@@ -68,7 +68,7 @@ class _MyHomeState extends State<Home> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text(homeController.getTextForButton()),
+                        Text(homeController.getNodeDescription()),
                         SizedBox(height: 35.0),
                         ElevatedButton(onPressed: () { Navigator.push(context,
                             MaterialPageRoute(builder: (context) => Chats())); }, child: Text("Chats"), style: ElevatedButton.styleFrom(
