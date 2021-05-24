@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:free_chat/src/network/database_handler.dart';
 import 'package:free_chat/src/network/invite.dart';
 import 'package:free_chat/src/network/networking.dart';
+import 'package:free_chat/src/repositories/chat_repository.dart';
 import 'package:free_chat/src/utils/logger.dart';
 import 'package:free_chat/src/view.dart';
 
@@ -32,7 +33,7 @@ class HomeController {
   Future<void> initNode() async {
     _currentNode = await networking.connectClient();
 
-    DatabaseHandler().fetchAllChats().then((value) => {
+    ChatRepository().fetchAllChats().then((value) => {
       for(ChatDTO chat in value) {
         networking.update(chat)
       }

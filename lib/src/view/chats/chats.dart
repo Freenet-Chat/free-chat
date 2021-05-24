@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:free_chat/src/network/database_handler.dart';
+import 'package:free_chat/src/repositories/chat_repository.dart';
 import 'package:free_chat/src/view.dart';
 
 import '../../model.dart';
@@ -18,7 +19,7 @@ class _ChatsState extends State<Chats> {
         ),
       body: Container(
         child: FutureBuilder(
-          future: DatabaseHandler().fetchAllChats(),
+          future: ChatRepository().fetchAllChats(),
           builder: (context, snapshot) {
             if(snapshot.data == null) {
               return Container(
@@ -39,7 +40,7 @@ class _ChatsState extends State<Chats> {
                   title: Text(snapshot.data[index].name.toString()),
                   //subtitle: Text(snapshot.data[index].type.join(' | ').toString().capitalizeAll()),
                   onTap: () async {
-                    var chat = await DatabaseHandler().fetchChatAndMessages(snapshot.data[index].id);
+                    var chat = await ChatRepository().fetchChatAndMessages(snapshot.data[index].id);
                     Navigator.of(context).push(new MaterialPageRoute(builder: (context) => ChatsDetail(chat, snapshot.data[index])));
                   }
                 );

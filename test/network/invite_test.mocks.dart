@@ -2,9 +2,9 @@
 // in free_chat/test/network/invite_test.dart.
 // Do not manually edit this file.
 
-import 'package:free_chat/src/fcp/fcp_connection.dart' as _i5;
-import 'package:free_chat/src/network/database_handler.dart' as _i4;
+import 'package:free_chat/src/fcp/fcp_connection.dart' as _i4;
 import 'package:free_chat/src/network/networking.dart' as _i2;
+import 'package:free_chat/src/repositories/chat_repository.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:uuid/uuid.dart' as _i3;
 
@@ -32,20 +32,20 @@ class MockUuid extends _i1.Mock implements _i3.Uuid {
   }
 }
 
-/// A class which mocks [DatabaseHandler].
+/// A class which mocks [FcpConnection].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDatabaseHandler extends _i1.Mock implements _i4.DatabaseHandler {
-  MockDatabaseHandler() {
+class MockFcpConnection extends _i1.Mock implements _i4.FcpConnection {
+  MockFcpConnection() {
     _i1.throwOnMissingStub(this);
   }
 }
 
-/// A class which mocks [FcpConnection].
+/// A class which mocks [ChatRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockFcpConnection extends _i1.Mock implements _i5.FcpConnection {
-  MockFcpConnection() {
+class MockChatRepository extends _i1.Mock implements _i5.ChatRepository {
+  MockChatRepository() {
     _i1.throwOnMissingStub(this);
   }
 }
