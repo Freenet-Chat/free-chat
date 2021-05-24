@@ -20,23 +20,11 @@ class FcpConnection {
 
   FcpSocketHandler fcpSocketHandler;
 
-  // final int defaultPort = 9481;
-
   final Logger _logger = Logger("FcpConnection");
 
   final FcpMessageQueue fcpMessageQueue = FcpMessageQueue();
 
   FcpMessage _foundMessage;
-
-  // FcpConnection() {
-  //   this._port = defaultPort;
-  //   this._host = "localhost";
-  // }
-
-  // FcpConnection.withPort(int port) {
-  //   this._port = port;
-  //   this._host = "localhost";
-  // }
 
   FcpConnection(String host, int port) {
     this._port = port;
