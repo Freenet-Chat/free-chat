@@ -15,23 +15,13 @@ import 'fcp_test_strings.dart';
 
 @GenerateMocks([FcpSocketHandler])
 void main() {
-  group('Constructors', () {
-    test('Connection should use default host and port', () {
-      final FcpConnection connection = FcpConnection();
-      expect(connection.host, "localhost");
-      expect(connection.port, connection.defaultPort);
-    });
-
-    test('Connection should use default host but different port', () {
-      final FcpConnection connection = FcpConnection.withPort(1234);
-      expect(connection.host, "localhost");
-      expect(connection.port, 1234);
-    });
-
+  group('Constructor', () {
     test('Connection should use different host and different port', () {
-      final FcpConnection connection = FcpConnection.withHostAndPort("different", 1234);
-      expect(connection.host, "different");
-      expect(connection.port, 1234);
+      int testPort = 1234;
+      String testHost = "different";
+      final FcpConnection connection = FcpConnection(testHost, testPort);
+      expect(connection.host, testHost);
+      expect(connection.port, testPort);
     });
   });
 
@@ -40,6 +30,8 @@ void main() {
     FcpClientGet fcpClientGet;
     FcpMessage fcpMessage;
     FcpSocketHandler fcpSocketHandler = MockFcpSocketHandler();
+    int testPort = 1234;
+    String testHost = "different";
 
     void simulateMessages() {
         for(var i = 0; i < 5; i++) {
@@ -50,7 +42,7 @@ void main() {
       }
 
     setUp(() {
-      connection = FcpConnection();
+      connection = FcpConnection(testHost, testPort);
       connection.fcpSocketHandler = fcpSocketHandler;
       fcpClientGet = FcpClientGet("testUri", identifier: "testIdentifier");
       fcpMessage = FcpMessage("Hello World!");
@@ -87,8 +79,11 @@ void main() {
 
   group("Contains message", () {
     FcpConnection connection;
+    int testPort = 1234;
+    String testHost = "different";
+
     setUp(() {
-      connection = FcpConnection();
+      connection = FcpConnection(testHost, testPort);
       connection.fcpMessageQueue.addItemToQueue(FcpClientGet("testUri", identifier: "TestIdentifier"));
     });
 
