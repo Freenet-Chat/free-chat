@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../config.dart';
-import '../../model.dart';
 
 class HomeNamePopup {
 
@@ -32,11 +31,10 @@ class HomeNamePopup {
         ),
       ),
       actions: <Widget>[
-        new FlatButton(
+        new TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          textColor: Theme.of(context).primaryColor,
           child: const Text('Close'),
         ),
         ElevatedButton(onPressed: () async {

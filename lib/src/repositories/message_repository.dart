@@ -1,6 +1,5 @@
 import 'package:free_chat/src/network/database_handler.dart';
 import 'package:free_chat/src/repositories/repository_interface.dart';
-import 'package:free_chat/src/utils/logger.dart';
 
 
 import '../model.dart';

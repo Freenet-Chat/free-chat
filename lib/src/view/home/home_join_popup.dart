@@ -31,11 +31,10 @@ class HomeJoinPopup {
       actions: <Widget>[
         ElevatedButton(onPressed: () async => { ClipboardHelper.copyToClipboard(inviteResponse: invite) }, child: Text("Copy invite code"), style: ElevatedButton.styleFrom()
         ),
-        new FlatButton(
+        new TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          textColor: Theme.of(context).primaryColor,
           child: const Text('Close'),
         ),
         ElevatedButton(onPressed: () async => { await _homeJoinController.inviteAccepted(invite, context) }, child: Text("Done"), style: ElevatedButton.styleFrom()

@@ -1,7 +1,6 @@
 
 import 'package:free_chat/src/fcp/fcp.dart';
 import 'package:free_chat/src/model.dart';
-import 'package:free_chat/src/network/database_handler.dart';
 import 'package:free_chat/src/network/networking.dart';
 import 'package:free_chat/src/repositories/chat_repository.dart';
 import 'package:mockito/annotations.dart';

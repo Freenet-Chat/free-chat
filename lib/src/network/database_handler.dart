@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:free_chat/src/model.dart';
-import 'package:free_chat/src/model/chat_dto.dart';
 import 'package:free_chat/src/utils/logger.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';

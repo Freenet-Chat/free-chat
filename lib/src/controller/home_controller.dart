@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:free_chat/src/network/database_handler.dart';
 import 'package:free_chat/src/network/invite.dart';
 import 'package:free_chat/src/network/networking.dart';
 import 'package:free_chat/src/repositories/chat_repository.dart';
@@ -18,7 +15,6 @@ class HomeController {
 
   Node _currentNode;
 
-  SSKKey _sskKey;
 
   factory HomeController() {
     return _homeController;

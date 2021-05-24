@@ -1,17 +1,13 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:free_chat/src/fcp/fcp.dart';
 import 'package:free_chat/src/fcp/model/fcp_message.dart';
-import 'package:http/testing.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:free_chat/src/fcp/fcp_connection.dart';
 
 import 'fcp_connection_test.mocks.dart';
-import 'fcp_test_strings.dart';
 
 @GenerateMocks([FcpSocketHandler])
 void main() {

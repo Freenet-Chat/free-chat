@@ -13,8 +13,6 @@
                 }]
             }
  */
-import 'dart:convert';
-
 import 'package:free_chat/src/model.dart';
 
 class Chat {
@@ -70,10 +68,6 @@ class Chat {
   }
 
   Chat.onlyInfo(this._with, this._messages, this._requestUri, this.sharedId);
-
-  List<User> getUsers() {
-    //return this._users;
-  }
 
   List<Message> getMessages() {
     return this._messages;
