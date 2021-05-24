@@ -8,7 +8,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class DatabaseHandler {
-  // TODO: Refactor unused variable
   static final Logger _logger = Logger("DatabaseHandler");
 
   get database => _database;
@@ -24,8 +23,8 @@ class DatabaseHandler {
   DatabaseHandler._internal();
 
   Future<void> initializeDatabase(String databaseName) async {
+    _logger.i("Initializing Database");
 
-    // TODO: Refactor unused variable replace string
     String createChat = "CREATE TABLE chat(id INTEGER PRIMARY KEY, insertUri TEXT, requestUri TEXT, encryptKey TEXT, name TEXT, sharedId TEXT)";
     String createMessage = "CREATE TABLE message(id INTEGER PRIMARY KEY, sender TEXT, message TEXT, status TEXT, timestamp TEXT, chatId INTEGER, messageType TEXT, FOREIGN KEY (chatId) REFERENCES Chat (id) ON DELETE NO ACTION ON UPDATE NO ACTION)";
 
@@ -35,10 +34,10 @@ class DatabaseHandler {
         onCreate: (db, version) {
           return Future.wait([
             db.execute(
-              "CREATE TABLE chat(id INTEGER PRIMARY KEY, insertUri TEXT, requestUri TEXT, encryptKey TEXT, name TEXT, sharedId TEXT)",
+                createChat
             ),
             db.execute(
-              "CREATE TABLE message(id INTEGER PRIMARY KEY, sender TEXT, message TEXT, status TEXT, timestamp TEXT, chatId INTEGER, messageType TEXT, FOREIGN KEY (chatId) REFERENCES Chat (id) ON DELETE NO ACTION ON UPDATE NO ACTION)",
+                createMessage
             )
           ]);
         },

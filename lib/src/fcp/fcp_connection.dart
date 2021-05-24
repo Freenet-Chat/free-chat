@@ -14,9 +14,6 @@ class FcpConnection {
   get host => _host;
   String _host;
 
-  // TODO: Refactor unused variable
-  InternetAddress _address;
-
   String response;
 
   FcpSocketHandler fcpSocketHandler;

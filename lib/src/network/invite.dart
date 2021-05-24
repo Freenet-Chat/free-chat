@@ -26,14 +26,7 @@ class Invite {
     return _invite;
   }
 
-  // TODO: Refactor unused variable
-  ChatClient _client;
-
   Invite._internal();
-
-  void setClient(ChatClient client) {
-    this._client = client;
-  }
 
   Future<InitialInvite> createInitialInvitation(String identifier) async {
 
@@ -72,9 +65,6 @@ class Invite {
     var _insertUri = _sskKey.getAsUskInsertUri() + "chat/0/";
 
     var _requestUri = _sskKey.getAsUskRequestUri() + "chat/0/";
-
-    // TODO: Refactor unused variable
-    String _unique = Uuid().v4();
 
     _logger.i("InitialInvite12 => $initialInvite");
 

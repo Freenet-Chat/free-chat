@@ -9,9 +9,6 @@ import '../model.dart';
 
 class ChatRepository implements RepositoryInterface<ChatDTO>{
   static final ChatRepository _chatRepository = ChatRepository._internal();
-
-  // TODO: Refactor unused variable
-  final Logger _logger = Logger("ChatRepository");
   
   final DatabaseHandler _databaseHandler = DatabaseHandler();
 

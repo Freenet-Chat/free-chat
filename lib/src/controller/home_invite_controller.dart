@@ -21,12 +21,6 @@ class HomeInviteController {
     return _homeInviteController;
   }
 
-  // TODO: Refactor unused Variable networking and database
-
-  DatabaseHandler _databaseHandler = DatabaseHandler();
-
-  Networking _networking = Networking();
-
   Invite _invite = Invite();
 
   HomeInviteController._internal();
@@ -43,23 +37,10 @@ class HomeInviteController {
 
     LoadingPopup.build(context, "Joining Chatroom this can take up to a couple minutes");
 
-    // TODO: Refactor duplicated code just Navigator.pop before
-    if(await _invite.inviteAccepted(invite, InitialInviteResponse.fromBase64(i))) {
-      Navigator.pop(context);
-      Navigator.pop(context);
-    }
-    else {
-      Navigator.pop(context);
-      Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.pop(context);
+    if(!(await _invite.inviteAccepted(invite, InitialInviteResponse.fromBase64(i)))) {
       ErrorPopup.build(context, "An error occured while trying to join the chat room, please try again later");
     }
-
   }
-
-  // TODO: Refactor duplicated code copyToClipboard also in home_join_controller with same logic
-  void copyToClipboard(InitialInvite invite) {
-    Clipboard.setData(new ClipboardData(text: invite.toBase64()));
-    FreeToast.showToast("Copied to clipboard");
-  }
-
 }

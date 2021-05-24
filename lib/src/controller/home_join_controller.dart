@@ -23,22 +23,8 @@ class HomeJoinController {
 
   HomeJoinController._internal();
 
-
-  // TODO: Refactor unused Variable networking and database and invite
-  DatabaseHandler _databaseHandler = DatabaseHandler();
-
-  Networking _networking = Networking();
-
-  Invite _invite = Invite();
-
   Future<void> inviteAccepted(
       InitialInviteResponse invite, BuildContext context) async {
 
-  }
-
-  // TODO: Refactor duplicated code copyToClipboard also in home_invite_controller with same logic
-  void copyToClipboard(InitialInviteResponse invite) {
-    Clipboard.setData(new ClipboardData(text: invite.toBase64()));
-    FreeToast.showToast("Copied to clipboard");
   }
 }

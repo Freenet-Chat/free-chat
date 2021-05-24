@@ -29,8 +29,7 @@ class FcpSocketHandler {
 
   void dataHandler(data) {
 
-    // TODO: Refactor shouldn't initialize with null
-    FcpMessage fcpMessage = null;
+    FcpMessage fcpMessage;
 
     String msg = new String.fromCharCodes(data).trim();
     bool flag = false;

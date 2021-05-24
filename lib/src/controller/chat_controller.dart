@@ -8,7 +8,6 @@ import '../model.dart';
 class ChatController {
   static final ChatController _chatController = ChatController._internal();
 
-  // TODO: Refactor unused Logger - Maybe use somewhere?
   final Logger _logger = Logger("ChatController");
 
   final Messaging _messaging = Messaging();
@@ -20,6 +19,7 @@ class ChatController {
   ChatController._internal();
 
   Future<void> sendMessage(ChatDTO chat, String text) async {
+    _logger.i("Sending message: $text");
 
     var timestamp = formatDate(DateTime.now(), [dd, '/', mm, '/', yyyy, ' ', HH, ':', nn]);
 
