@@ -3,6 +3,8 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:free_chat/src/fcp/rules/rule_collection.dart';
+import 'package:free_chat/src/fcp/rules/rule.dart';
 import 'package:free_chat/src/model.dart';
 import 'package:free_chat/src/network/messaging.dart';
 import 'package:free_chat/src/utils/logger.dart';
@@ -21,12 +23,16 @@ class FcpMessageHandler extends ChangeNotifier {
   FcpMessageHandler._internal();
 
   Logger _logger = Logger("FcpMessageHandler");
+  get logger => _logger;
 
   Messaging _messaging = Messaging();
+  get messaging => _messaging;
 
   List<String> _identifiers = [];
+  get identifiers => _identifiers;
 
   List<String> _allData = [];
+  get allData => _allData;
 
   HashMap<String, Map<String, dynamic>> progress = HashMap();
 
@@ -35,99 +41,7 @@ class FcpMessageHandler extends ChangeNotifier {
   handleMessage(FcpConnection _fcpConnection) {
     var msg = _fcpConnection.fcpMessageQueue.getLastMessage();
     _logger.i(msg.name);
-    switch (msg.name) {
-      case 'PersistentGet':
-        {
-          break;
-        }
-      case 'PersistentPut':
-        {
-          break;
-        }
-      case 'PutSuccessful':
-        {
-          FreeToast.showToast("Upload of one message finished!");
-          _identifiers.add(msg.getField('Identifier'));
-          _logger.i(msg.toString());
-          break;
-        }
-      case 'PutFailed':
-        {
-
-          _logger.e(msg.toString());
-          break;
-        }
-      case 'GetFailed':
-        {
-          _logger.i(msg.getField("Code"));
-          if(msg.getField("Code") == "27") {
-            _logger.i("Redirecting to new url");
-            FcpClientGet clientGet = FcpClientGet(msg.getField("RedirectURI"), identifier: msg.getField("Identifier"), global: true, persistence: Persistence.forever, realTimeFlag: true);
-            _fcpConnection.sendFcpMessage(clientGet);
-          }
-          if(msg.getField("Code") == "28") {
-            Future.delayed(const Duration(seconds: 10), () => _fcpConnection.sendFcpMessage(FcpClientGet(identifierToUri[msg.getField("Identifier")],identifier: msg.getField("Identifier"), global: true, persistence: Persistence.forever, realTimeFlag: true)));
-          }
-          //_fcpConnection.sendFcpMessage(FcpRemoveRequest(msg.getField("Identifier"), global: true));
-
-          _logger.e(msg.toString() + identifierToUri[msg.getField("Identifier")]);
-          break;
-        }
-      case 'AllData':
-        {
-          if(_allData.contains(msg.data))
-            return;
-          _allData.add(msg.data);
-          if (msg.getField("Identifier").contains("-chat")) {
-            FreeToast.showToast("New message has arrived!");
-            _messaging.updateChat(
-                msg, identifierToUri[msg.getField("Identifier")]);
-          }
-          _identifiers.add(msg.getField('Identifier'));
-          break;
-        }
-      case 'DataFound':
-        {
-          var ident = msg.getField('Identifier');
-
-          if (_identifiers.contains(ident)) break;
-          _fcpConnection
-              .sendFcpMessage(FcpGetRequestStatus(ident, global: true));
-          _identifiers.add(ident);
-          break;
-        }
-      case 'ProtocolError':
-        {
-          _logger.e(msg.toString());
-          //if(msg.getField("Code") == "15") _fcpConnection.sendFcpMessage(FcpRemoveRequest(msg.getField("Identifier"), global: true));
-          break;
-        }
-      case 'SimpleProgress':
-        {
-          var ident = msg.getField('Identifier');
-          progress[ident] = {
-            "Total": msg.getField("Total"),
-            "Succeeded": msg.getField("Succeeded")
-          };
-          if(_allData.contains(ident) || _identifiers.contains(ident)) {
-            break;
-          }
-          Future.delayed(const Duration(seconds: 10), () => _fcpConnection.sendFcpMessage(FcpGetRequestStatus(ident, global: true)));
-          notifyListeners();
-          break;
-        }
-      case 'SubscribedUSKUpdate':
-        {
-          var identifier = Uuid().v4() + "-chat";
-          _logger.i("SubscribedUpdate $identifier + ${msg.getField("URI")}");
-
-          FcpClientGet fcpClienteGet = FcpClientGet(msg.getField("URI"),
-              identifier: identifier, maxRetries: -1, realTimeFlag: true);
-
-          identifierToUri[identifier] = msg.getField("URI");
-
-          Future.delayed(Duration(seconds: 10), () => _fcpConnection.sendFcpMessage(fcpClienteGet));
-        }
-    }
+    Rule rule = RuleCollection.ruleMap[msg.name];
+    rule.act(this, msg, _fcpConnection);
   }
 }
