@@ -12,8 +12,6 @@ export 'package:free_chat/src/model/ssk_key.dart';
 
 export 'package:free_chat/src/model/node.dart';
 
-export 'package:free_chat/src/model/listening_url.dart';
-
 export 'package:uuid/uuid.dart';
 
 export 'package:free_chat/src/model/message_dto.dart';

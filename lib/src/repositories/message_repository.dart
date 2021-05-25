@@ -4,17 +4,31 @@ import 'package:free_chat/src/repositories/repository_interface.dart';
 
 import '../model.dart';
 
+/// The MessageRepository handles the communication between application and
+/// database
+///
+/// Implements the [RepositoryInterface]
+///
+/// Allows to update, insert and select Data of the [MessageRepository]
 class MessageRepository implements RepositoryInterface<MessageDTO> {
+  /// Initialize MessageRepository as singleton
   static final MessageRepository _messageRepository = MessageRepository._internal();
-
-  final DatabaseHandler _databaseHandler = DatabaseHandler();
 
   factory MessageRepository() {
     return _messageRepository;
   }
 
   MessageRepository._internal();
+  ///
 
+  final DatabaseHandler _databaseHandler = DatabaseHandler();
+
+  /// Upsert (Update or Insert) a given [MessageDTO]
+  ///
+  /// if a Message with the same id as [message] was found in the database
+  /// update the current entry else insert [message] as a new entry
+  ///
+  /// Return the [message] on success
   Future<MessageDTO> upsert(MessageDTO message) async {
     if (message.id == null) {
       message.id = await _databaseHandler.database.insert("message", message.toMap());
@@ -26,6 +40,9 @@ class MessageRepository implements RepositoryInterface<MessageDTO> {
     return message;
   }
 
+  /// Fetch a [MessageDTO] at a given [id]
+  ///
+  /// Returns the [message] on successful fetch
   Future<MessageDTO> fetch(int id) async {
     List<Map> results = await _databaseHandler.database.query(
         "message", columns: MessageDTO.columns,

@@ -1,3 +1,7 @@
+/// For an overview over all View take a look at the demo video
+/// * https://youtu.be/BP_sBDDAPgU
+///
+
 export 'package:free_chat/src/view/home/home.dart';
 
 export 'package:free_chat/src/view/home/home_theme.dart';

@@ -1,5 +1,12 @@
 import 'package:free_chat/src/fcp/fcp.dart';
-
+/// Implements a ClientPut Message of the FCP
+/// * https://github.com/freenet/wiki/wiki/FCPv2-ClientPut
+///
+/// Extends [FcpMessage] and takes all the fields mentioned in the wiki.
+/// Defaults the non set fields to the defaults value of the message
+/// Sets the [fields] and the [name] accordingly.
+///
+/// Requires an [uri] and the [data] to put
 class FcpClientPut extends FcpMessage {
   FcpClientPut(String uri, String data,
       {

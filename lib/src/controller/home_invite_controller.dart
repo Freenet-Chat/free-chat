@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:free_chat/src/model.dart';
 import 'package:free_chat/src/network/invite.dart';
-import 'package:free_chat/src/utils/logger.dart';
 import 'package:free_chat/src/view.dart';
 
 /// A controller for the home invite popup view

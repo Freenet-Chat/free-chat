@@ -1,5 +1,12 @@
 import 'package:free_chat/src/fcp/fcp.dart';
-
+/// Implements a ClientGet Message of the FCP
+/// * https://github.com/freenet/wiki/wiki/FCPv2-ClientGet
+///
+/// Extends [FcpMessage] and takes all the fields mentioned in the wiki.
+/// Defaults the non set fields to the defaults value of the message
+/// Sets the [fields] and the [name] accordingly.
+///
+/// Requires an [uri]
 class FcpClientGet extends FcpMessage {
   FcpClientGet(String uri, {bool ignoreDs, bool dsOnly, String identifier,
                  int verbosity, int maxSize, int maxTempSize, int maxRetries,
