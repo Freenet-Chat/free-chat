@@ -9,6 +9,7 @@ import 'package:mockito/mockito.dart';
 import 'invite_test.mocks.dart';
 import 'networking_test_strings.dart';
 
+/// Test all functionalities of the [Networking] class
 @GenerateMocks([FcpConnection])
 void main() {
   group('Test networking connection', () {

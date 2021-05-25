@@ -1,21 +1,28 @@
 import 'package:free_chat/src/model.dart';
 import 'package:free_chat/src/model/chat_dto.dart';
 
+/// A MessageDTO is a Message Object formatted and ready for insertion into a SQLite
+/// Database [sqflite]
+///
+/// The Attributes are equal to [Message] except of the [id] used locally in the
+/// SQLite
 class MessageDTO {
   MessageDTO();
 
   int id;
+
+  get message => _message;
   String _message;
+
+  get timestamp => _timestamp;
   String _timestamp;
+
+  get sender => _sender;
   String _sender;
   int chatId;
   ChatDTO chat;
   String messageTyp;
   String status;
-
-  get message => _message;
-  get timestamp => _timestamp;
-  get sender => _sender;
 
   static final columns = ["id", "message", "timestamp", "chatId", "sender", "messageType", "status"];
 

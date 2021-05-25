@@ -6,23 +6,34 @@ import 'package:free_chat/src/model/initial_invite_response.dart';
 import 'package:free_chat/src/network/networking.dart';
 import 'package:free_chat/src/repositories/chat_repository.dart';
 import 'package:free_chat/src/utils/logger.dart';
+import 'package:free_chat/src/view.dart';
 
+
+/// Handle all incoming and outgoing [InitialInvite] and [InitialInviteResponse]
 class Invite {
 
-  static final Logger _logger = Logger(Invite().toString());
-
+  /// Initialize Invite as a singleton
   static final Invite _invite = Invite._internal();
-
-  Networking networking = Networking();
-
-  ChatRepository chatRepository = ChatRepository();
 
   factory Invite() {
     return _invite;
   }
 
   Invite._internal();
+  ///
 
+  static final Logger _logger = Logger(Invite().toString());
+
+  Networking networking = Networking();
+
+  /// Get a ChatRepository instance to uploads chats to
+  ChatRepository chatRepository = ChatRepository();
+
+  /// Create an initialInvite by a given [identifier]
+  ///
+  /// Set all fields of [InitialInvite] accordingly
+  /// Upload an empty chat to the Freenet and prepare the InitialInvite
+  /// to get shared via QR in [HomeInvitePopup]
   Future<InitialInvite> createInitialInvitation(String identifier) async {
 
     var _sskKey = await networking.getKeys();
@@ -54,6 +65,21 @@ class Invite {
     return initialInvite;
   }
 
+  /// Handle an incoming [initialInvite] from the [HomeJoin] view and use three
+  /// identifiers:
+  /// [identifierHandshake]
+  /// [identifierInsert]
+  /// [identifierRequest]
+  ///
+  /// To display a progress
+  /// eg. (Success / Total)
+  ///
+  /// Upload an empty chat to the insertUri and a response to the handshakeUri
+  /// Download the Chat object uploaded from the other user and passed in the
+  /// initialInvite
+  ///
+  /// Generates and returns an [InitialInviteResponse] which gets passed to the
+  /// other user
   Future<InitialInviteResponse> handleInvitation(InitialInvite initialInvite, String identifierHandshake, String identifierInsert, String identifierRequest) async {
     var _sskKey = await networking.getKeys();
 
@@ -91,6 +117,14 @@ class Invite {
     return initialInviteResponse;
   }
 
+  /// Handle an accepted invite
+  ///
+  /// User A -> Uploads [initialInvite]
+  /// User B -> Reads [initialInvite] and uploads [response]
+  /// User A -> Read [response] and handles the answer in [inviteAccepted]
+  ///
+  /// Creates the finished Chat with all information and saves it in the local
+  /// database
   Future<bool> inviteAccepted(InitialInvite initialInvite, InitialInviteResponse response) async {
     FcpMessage fcpChat;
 

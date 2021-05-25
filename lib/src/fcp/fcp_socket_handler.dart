@@ -4,7 +4,11 @@ import 'package:free_chat/src/utils/logger.dart';
 
 import 'fcp.dart';
 
+/// The FcpSocketHandler used by the [socket] in the [FcpConnection] class
+///
+/// Used to handle the input stream of the socket and write messages to the socket
 class FcpSocketHandler {
+
   FcpMessageQueue _fcpMessageQueue;
 
   Socket _socket;
@@ -27,6 +31,8 @@ class FcpSocketHandler {
     this._socket.destroy();
   }
 
+  /// Format and transform an incoming byte stream [data] to a [FcpMessage] and
+  /// return it
   void dataHandler(data) {
 
     FcpMessage fcpMessage;
@@ -75,6 +81,7 @@ class FcpSocketHandler {
     }
   }
 
+  /// Log an [error] send by the [_socket]
   AsyncError errorHandler(Object error, StackTrace trace) {
     _logger.e(error);
     return null;

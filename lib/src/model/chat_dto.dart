@@ -1,5 +1,10 @@
 import '../model.dart';
 
+/// A ChatDTO is a Chat Object formatted and ready for insertion into a SQLite
+/// Database [sqflite]
+///
+/// The Attributes are equal to [Chat] except of the [id] used locally in the
+/// SQLite
 class ChatDTO {
   ChatDTO();
 
@@ -28,6 +33,7 @@ class ChatDTO {
     return map;
   }
 
+  /// Use a map to generate a [ChatDTO]
   static fromMap(Map map) {
     ChatDTO chat = new ChatDTO();
     chat.id = map["id"];
@@ -40,6 +46,7 @@ class ChatDTO {
     return chat;
   }
 
+  /// Convert a [Chat] to a [ChatDTO]
   static fromChat(Chat chat) {
     ChatDTO chatDTO = new ChatDTO();
     chatDTO.requestUri = chat.requestUri;

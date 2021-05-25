@@ -4,10 +4,7 @@ import 'package:free_chat/src/model.dart';
 import 'package:free_chat/src/utils/clipboard_helper.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-import '../../controller.dart';
 class HomeJoinPopup {
-
-  HomeJoinController _homeJoinController = HomeJoinController();
 
   Widget buildPopupDialog(BuildContext context, InitialInviteResponse invite) {
     return new AlertDialog(
@@ -37,7 +34,7 @@ class HomeJoinPopup {
           },
           child: const Text('Close'),
         ),
-        ElevatedButton(onPressed: () async => { await _homeJoinController.inviteAccepted(invite, context) }, child: Text("Done"), style: ElevatedButton.styleFrom()
+        ElevatedButton(onPressed: () async => { Navigator.of(context).pop() }, child: Text("Done"), style: ElevatedButton.styleFrom()
         ),
       ],
     );

@@ -6,17 +6,32 @@ import 'package:sqflite/sqflite.dart';
 
 import '../model.dart';
 
+/// The ChatRepository handles the communication between application and
+/// database
+///
+/// Implements the [RepositoryInterface]
+///
+/// Allows to update, insert and select Data of the [ChatRepository]
 class ChatRepository implements RepositoryInterface<ChatDTO>{
+  /// ChatRepository as a singleton
   static final ChatRepository _chatRepository = ChatRepository._internal();
-  
-  final DatabaseHandler _databaseHandler = DatabaseHandler();
+
 
   factory ChatRepository() {
     return _chatRepository;
   }
 
   ChatRepository._internal();
+  ///
 
+  final DatabaseHandler _databaseHandler = DatabaseHandler();
+
+  /// Upsert (Update or Insert) a given [ChatDTO]
+  ///
+  /// if a Chat with the same id as [chat] was found in the database
+  /// update the current entry else insert [chat] as a new entry
+  ///
+  /// Return the [chat] on success
   Future<ChatDTO> upsert(ChatDTO chat) async {
 
     var count = Sqflite.firstIntValue(await _databaseHandler.database.rawQuery(
@@ -30,6 +45,10 @@ class ChatRepository implements RepositoryInterface<ChatDTO>{
 
     return chat;
   }
+
+  /// Fetch a [ChatDTO] at a given [id]
+  ///
+  /// Returns the [chat] on successful fetch
   Future<ChatDTO> fetch(int id) async {
     List<Map> results = await _databaseHandler.database.query(
         "chat", columns: ChatDTO.columns, where: "id = ?", whereArgs: [id]);
@@ -39,6 +58,9 @@ class ChatRepository implements RepositoryInterface<ChatDTO>{
     return chat;
   }
 
+  /// Fetch a [ChatDTO] at a given [insertUri]
+  ///
+  /// Returns the [chat] on successful fetch
   Future<ChatDTO> fetchChatByInsertUri(String insertUri) async {
     List<Map> results = await _databaseHandler.database.query("chat", columns: ChatDTO.columns,
         where: "insertUri = ?",
@@ -52,6 +74,9 @@ class ChatRepository implements RepositoryInterface<ChatDTO>{
     return chat;
   }
 
+  /// Fetch a [ChatDTO] at a given [sharedId]
+  ///
+  /// Returns the [chat] on successful fetch
   Future<ChatDTO> fetchChatBySharedId(String sharedId) async {
     List<Map> results = await _databaseHandler.database.query("chat", columns: ChatDTO.columns,
         where: "sharedId = ?",
@@ -65,6 +90,9 @@ class ChatRepository implements RepositoryInterface<ChatDTO>{
     return chat;
   }
 
+  /// Fetch a [ChatDTO] at a given [requestUri]
+  ///
+  /// Returns the [chat] on successful fetch
   Future<ChatDTO> fetchChatByRequestUri(String requestUri) async {
     List<Map> results = await _databaseHandler.database.query("chat", columns: ChatDTO.columns,
         where: "requestUri LIKE ?",
@@ -80,6 +108,9 @@ class ChatRepository implements RepositoryInterface<ChatDTO>{
     return chat;
   }
 
+  /// Fetch a [Chat] at a given [id] and fill it with messages
+  ///
+  /// Returns a [chat] with all corresponding [message]s on succesful fetch
   Future<Chat> fetchChatAndMessages(int id) async {
     List<Map> results = await _databaseHandler.database.query(
         "chat", columns: ChatDTO.columns, where: "id = ?", whereArgs: [id]);
@@ -88,10 +119,7 @@ class ChatRepository implements RepositoryInterface<ChatDTO>{
 
     Chat chat = Chat.fromDTO(chatDTO, []);
 
-
-
     var results2 = await MessageRepository().fetchAllMessagesByChat(id);
-
 
     for (var res in results2) {
       Message message = Message.fromDTO(res);
@@ -101,6 +129,9 @@ class ChatRepository implements RepositoryInterface<ChatDTO>{
     return chat;
   }
 
+  /// Fetch all existing Chats in the Database
+  ///
+  /// Return a [List] of [ChatDTO]s
   Future<List<ChatDTO>> fetchAllChats() async {
     List<Map> results2 = await _databaseHandler.database.rawQuery("SELECT * FROM chat");
 
@@ -110,9 +141,6 @@ class ChatRepository implements RepositoryInterface<ChatDTO>{
       ChatDTO chat = ChatDTO.fromMap(res);
       chats.add(chat);
     }
-
     return chats;
   }
-  
-  
 }
