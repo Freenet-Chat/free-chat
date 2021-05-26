@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:free_chat/src/model.dart';
 import 'package:free_chat/src/utils/clipboard_helper.dart';
+import 'package:free_chat/src/view/utils/qr_alert_popup.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class HomeJoinPopup {
@@ -9,22 +10,7 @@ class HomeJoinPopup {
   Widget buildPopupDialog(BuildContext context, InitialInviteResponse invite) {
     return new AlertDialog(
       title: Text('Invite a FreeChat user to chat with you'),
-      content: SingleChildScrollView(
-        child: ListBody(
-          children: <Widget>[
-            Container(
-                height: 300,
-                width: 300,
-                child:
-                QrImage(
-                  data: invite.toBase64(),
-                  version: QrVersions.auto,
-                  size: 300,
-                )
-            )
-          ],
-        ),
-      ),
+      content: QrAlertPopup(invite: invite),
       actions: <Widget>[
         ElevatedButton(onPressed: () async => { ClipboardHelper.copyToClipboard(inviteResponse: invite) }, child: Text("Copy invite code"), style: ElevatedButton.styleFrom()
         ),
