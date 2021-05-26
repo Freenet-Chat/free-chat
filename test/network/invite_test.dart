@@ -19,6 +19,22 @@ void main() {
     Invite invite;
     ChatDTO temp;
 
+    Future<InitialInvite> create_test_invite() async {
+      return invite.createInitialInvitation("test");
+    }
+
+    Future<InitialInviteResponse> create_test_response(initialInvite) async {
+      return invite.handleInvitation(initialInvite, "identifierHandshake", "identifierInsert", "identifierRequest");
+    }
+
+    InitialInvite create_test_invite_direct() {
+      return InitialInvite("_requestUri", "_handshakeUri", "_name", "_encryptKey", "_insertUri", "_sharedId");
+    }
+
+    InitialInviteResponse create_test_response_direct() {
+      return InitialInviteResponse("_requestUriResponse", "_nameResponse");
+    }
+
     /// Set an [Invite] and [ChatDTO] used by every test
     setUp(() {
       invite = Invite();
@@ -54,8 +70,7 @@ void main() {
       /// given setUp is given
 
       /// when create initialInvite
-      InitialInvite initialInvite = await invite.createInitialInvitation(
-          "test");
+      InitialInvite initialInvite = await create_test_invite();
 
       /// then initialInvite to contains mock data
       expect(initialInvite.getRequestUri().contains("USK@testRequestUri"), true);
@@ -63,11 +78,10 @@ void main() {
 
     test('Should create invite response and update database', () async {
       /// given setUp and initialInvite is given
-      InitialInvite initialInvite = await invite.createInitialInvitation(
-          "test");
+      InitialInvite initialInvite = await create_test_invite();
 
       /// when should create initialInviteResponse
-      InitialInviteResponse response = await invite.handleInvitation(initialInvite, "identifierHandshake", "identifierInsert", "identifierRequest");
+      InitialInviteResponse response = await create_test_response(initialInvite);
 
       /// then response to be saved in fake database
       expect(response.requestUri.contains(temp.requestUri), true);
@@ -77,11 +91,10 @@ void main() {
     test('Should fail because of faulty network and return null on handle invitation', () async {
       /// given setUp and initialInvite is given and connection throws exception
       when(invite.networking.getMessage(any, any)).thenThrow(Exception());
-      InitialInvite initialInvite = await invite.createInitialInvitation(
-          "test");
+      InitialInvite initialInvite = await create_test_invite();
 
       /// when Invite gets handled
-      InitialInviteResponse response = await invite.handleInvitation(initialInvite, "identifierHandshake", "identifierInsert", "identifierRequest");
+      InitialInviteResponse response = await create_test_response(initialInvite);
 
       /// then should respond with a null
       expect(response, null);
@@ -90,8 +103,8 @@ void main() {
 
     test('Should accept invite response and create chat object', () async {
       /// given initialInvite, initialInviteResponse
-      InitialInvite initialInvite = InitialInvite("_requestUri", "_handshakeUri", "_name", "_encryptKey", "_insertUri", "_sharedId");
-      InitialInviteResponse initialInviteResponse = InitialInviteResponse("_requestUriResponse", "_nameResponse");
+      InitialInvite initialInvite = create_test_invite_direct();
+      InitialInviteResponse initialInviteResponse = create_test_response_direct();
 
       /// when invite is accepted
       bool accepted = await invite.inviteAccepted(initialInvite, initialInviteResponse);
@@ -105,8 +118,8 @@ void main() {
     test('Should fail because of faulty network and return false on accept invitation', () async {
       /// given initialInvite, response and networkign throws exception
       when(invite.networking.getMessage(any, any)).thenThrow(Exception());
-      InitialInvite initialInvite = InitialInvite("_requestUri", "_handshakeUri", "_name", "_encryptKey", "_insertUri", "_sharedId");
-      InitialInviteResponse initialInviteResponse = InitialInviteResponse("_requestUriResponse", "_nameResponse");
+      InitialInvite initialInvite = create_test_invite_direct();
+      InitialInviteResponse initialInviteResponse = create_test_response_direct();
 
       /// when invite gets accepted
       bool accepted = await invite.inviteAccepted(initialInvite, initialInviteResponse);
