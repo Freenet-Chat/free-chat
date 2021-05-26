@@ -61,6 +61,8 @@ class FcpMessageHandler extends ChangeNotifier {
     var msg = _fcpConnection.fcpMessageQueue.getLastMessage();
     _logger.i(msg.name);
     Rule rule = RuleCollection.ruleMap[msg.name];
+    if(rule == null)
+      return;
     rule.act(this, msg, _fcpConnection);
   }
 }
